@@ -3,28 +3,31 @@
 @section('title', 'Products List')
 
 @section('content')
-    <h1>Products</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Products</h1>
+        <a href="{{ route('products.create') }}" class="btn btn-primary">Create New Product</a>
+    </div>
 
-    <a href="{{ route('products.create') }}" style="background-color: blue; color: white; padding: 5px 10px; text-decoration: none;">Create New Product</a>
-    <hr>
-
-    @if($products->count() > 0)
+    <div class="row">
         @foreach($products as $product)
-            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                <h3>{{ $product->name }}</h3>
-                <p>{{ $product->description }}</p>
-                <p>Price: {{ $product->price }} $</p>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $product->name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ $product->price }} DH</h6>
+                        <p class="card-text">{{ Str::limit($product->description, 50) }}</p>
 
-                <a href="{{ route('products.edit', $product) }}">Edit</a>
+                        <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm text-white">View</a>
+                        <a href="{{ route('products.edit', $product) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                <form method="POST" action="{{ route('products.destroy', $product) }}" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" style="color: red;">Delete</button>
-                </form>
+                        <form method="POST" action="{{ route('products.destroy', $product) }}" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         @endforeach
-    @else
-        <p>No products found.</p>
-    @endif
+    </div>
 @endsection

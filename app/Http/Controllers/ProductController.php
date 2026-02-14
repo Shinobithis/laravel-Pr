@@ -17,8 +17,20 @@ class ProductController extends Controller
     }
 
     public function store(Request $request) {
+        $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'price' => 'required|numeric|min:0',
+        ]);
+
         Product::create($request->all());
-        return redirect()->route('products.index');
+
+        return redirect()->route('products.index')
+            ->with('success', 'Product created successfully.');
+    }
+
+    public function show(Product $product) {
+        return view('products.show', compact('product'));
     }
 
     public function edit(Product $product) {
@@ -26,12 +38,21 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, Product $product) {
+        $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'price' => 'required|numeric|min:0',
+        ]);
+
         $product->update($request->all());
-        return redirect()->route('products.index');
+
+        return redirect()->route('products.index')
+            ->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Product $product) {
         $product->delete();
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')
+            ->with('success', 'Product deleted successfully.');
     }
 }
