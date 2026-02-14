@@ -55,4 +55,44 @@ class ProductController extends Controller
         return redirect()->route('products.index')
             ->with('success', 'Product deleted successfully.');
     }
+
+    public function storeImage(Request $request) {
+        $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $input = $request->all();
+
+        if ($request->hasFile('image')) {
+            $input['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        Product::create($input);
+
+        return redirect()->route('products.index')
+            ->with('success', 'Product created successfully.');
+    }
+
+    public function updateImage(Request $request, Product $product) {
+        $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $input = $request->all();
+
+        if ($request->hasFile('image')) {
+            $input['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($input);
+
+        return redirect()->route('products.index')
+            ->with('success', 'Product updated successfully.');
+    }
 }

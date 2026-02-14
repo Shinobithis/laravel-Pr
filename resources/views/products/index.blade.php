@@ -12,6 +12,12 @@
         @foreach($products as $product)
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
+                    @if($product->image)
+                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                    @else
+                        <img src="https://via.placeholder.com/300x200?text=No+Image" class="card-img-top" alt="No Image" style="height: 200px; object-fit: cover;">
+                    @endif
+
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ $product->price }} DH</h6>
